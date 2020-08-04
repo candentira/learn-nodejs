@@ -1,0 +1,23 @@
+{
+  "name": "learn-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "task1": "nodemon task1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/candentira/learn-nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/candentira/learn-nodejs/issues"
+  },
+  "homepage": "https://github.com/candentira/learn-nodejs#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
