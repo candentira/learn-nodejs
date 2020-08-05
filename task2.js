@@ -1,6 +1,6 @@
-const fs = require('fs')
-const csv = require('csvtojson');
-const { Transform, pipeline } = require('stream');
+import fs from 'fs'
+import csv from 'csvtojson'
+import { Transform, pipeline } from 'stream'
 
 const inputFileName = './csv/nodejs-hw1-ex1.csv'
 const outputFileStream = './nodejs-hw1-ex2.txt'

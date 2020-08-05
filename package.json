@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "task1": "nodemon task1",
-    "task2": "nodemon task2",
+    "task1": "nodemon --exec babel-node task1",
+    "task2": "nodemon --exec babel-node task2",
+    "transpile": "babel *.js --out-dir dist",
+    "clean": "rimraf dist",
+    "build": "npm run clean && npm run transpile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,9 +22,19 @@
   },
   "homepage": "https://github.com/candentira/learn-nodejs#readme",
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.11.0",
+    "nodemon": "^2.0.4",
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
     "csvtojson": "^2.0.10"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   }
 }

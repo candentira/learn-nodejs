@@ -1,6 +1,4 @@
-var stream = require('stream');
-
-const { Transform } = require('stream');
+import { Transform } from 'stream'
 
 const reverse = str => {
     return str.split('').reverse().join('') + '\n\n\n'
