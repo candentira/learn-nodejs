@@ -1,0 +1,37 @@
+export const USERS_LIST = [{
+    id: '1',
+    login: 'FirstLogin',
+    password: 'FirstPassword',
+    age: 23,
+    isDeleted: false
+}, {
+    id: '2',
+    login: 'SecondLogin',
+    password: 'SecondPassword',
+    age: 24,
+    isDeleted: false
+}, {
+    id: '3',
+    login: 'ThirdLogin',
+    password: 'ThirdPassword',
+    age: 23,
+    isDeleted: false
+}, {
+    id: '4',
+    login: 'ForthLogin',
+    password: 'ForthPassword',
+    age: 23,
+    isDeleted: false
+}, {
+    id: '5',
+    login: 'FifthLogin',
+    password: 'FifthPassword',
+    age: 23,
+    isDeleted: false
+}, {
+    id: '6',
+    login: 'SixthLogin',
+    password: 'SixthPassword',
+    age: 23,
+    isDeleted: false
+}];
