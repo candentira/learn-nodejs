@@ -1,4 +1,6 @@
 import { USERS_LIST } from './constants';
+import userSchema from './users.schema';
+import { validateSchema } from './validation';
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -9,7 +11,6 @@ app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
-console.log(USERS_LIST);
 app.get('/users', (req, res) => {
     res.send(JSON.stringify(USERS_LIST));
 });
@@ -42,7 +43,7 @@ app.get('/getAutoSuggestUsers', (req, res) => {
     res.json(filtered);
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', validateSchema(userSchema), (req, res) => {
     const user = req.body;
     if (user) {
         USERS_LIST.push(user);
@@ -50,11 +51,8 @@ app.post('/users', (req, res) => {
     }
 });
 
-app.put('/users', (req, res) => {
+app.put('/users', validateSchema(userSchema), (req, res) => {
     const newUser = req.body;
-    if (!newUser.id) {
-        res.status(404).json({ message: 'Wrong data format' });
-    }
     const userIndex = USERS_LIST.findIndex(user => user.id === newUser.id);
     if (userIndex >= 0) {
         USERS_LIST[userIndex] = newUser;
