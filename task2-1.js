@@ -1,7 +1,8 @@
 import { USERS_LIST } from './constants';
-import userSchema from './users.schema';
 import { validateSchema } from './validation';
-const express = require('express');
+import { v4 as uuidv4 } from 'uuid';
+import { put as userPutSchema, post as userPostSchema } from './users.schema';
+import express from 'express';
 const app = express();
 const port = 3000;
 
@@ -43,22 +44,24 @@ app.get('/getAutoSuggestUsers', (req, res) => {
     res.json(filtered);
 });
 
-app.post('/users', validateSchema(userSchema), (req, res) => {
-    const user = req.body;
-    if (user) {
-        USERS_LIST.push(user);
-        res.status(204).send();
-    }
+app.post('/users', validateSchema(userPostSchema), (req, res) => {
+    const user =  {
+        id: uuidv4(),
+        ...req.body,
+        isDeleted: false
+    };
+    USERS_LIST.push(user);
+    res.status(204).send();
 });
 
-app.put('/users', validateSchema(userSchema), (req, res) => {
-    const newUser = req.body;
-    const userIndex = USERS_LIST.findIndex(user => user.id === newUser.id);
+app.put('/users/:id', validateSchema(userPutSchema), (req, res) => {
+    const { id } = req.params;
+    const userIndex = USERS_LIST.findIndex(user => user.id === id);
     if (userIndex >= 0) {
-        USERS_LIST[userIndex] = newUser;
+        USERS_LIST[userIndex] = req.body;
         res.status(204).send();
     } else {
-        res.status(404).json({ message: `User with id ${newUser.id} not found` });
+        res.status(404).json({ message: `User with id ${id} not found` });
     }
 });
 
