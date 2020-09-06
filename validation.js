@@ -1,6 +1,6 @@
 const errorResponse = schemaErrors => {
     const errors = schemaErrors.map(({ path, message }) => ({ path, message }));
-    return { status: 'failed', errors };
+    return { errors };
 };
 
 export const passwordValidation = (value, helpers) => {

@@ -1,7 +1,7 @@
 import { USERS_LIST } from './constants';
 import { validateSchema } from './validation';
 import { v4 as uuidv4 } from 'uuid';
-import { put as userPutSchema, post as userPostSchema } from './users.schema';
+import { userUpdateSchema, userCreateSchema } from './users.schema';
 import express from 'express';
 const app = express();
 const port = 3000;
@@ -44,7 +44,7 @@ app.get('/getAutoSuggestUsers', (req, res) => {
     res.json(filtered);
 });
 
-app.post('/users', validateSchema(userPostSchema), (req, res) => {
+app.post('/users', validateSchema(userCreateSchema), (req, res) => {
     const user =  {
         id: uuidv4(),
         ...req.body,
@@ -54,7 +54,7 @@ app.post('/users', validateSchema(userPostSchema), (req, res) => {
     res.status(204).send();
 });
 
-app.put('/users/:id', validateSchema(userPutSchema), (req, res) => {
+app.put('/users/:id', validateSchema(userUpdateSchema), (req, res) => {
     const { id } = req.params;
     const userIndex = USERS_LIST.findIndex(user => user.id === id);
     if (userIndex >= 0) {
