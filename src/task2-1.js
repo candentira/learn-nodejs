@@ -1,8 +1,11 @@
-const { Sequelize, Op } = require('sequelize');
+/*
+OBSOLETE
+*/
+
+const { Sequelize } = require('sequelize');
 import { validateSchema } from './validation';
-import { v4 as uuidv4 } from 'uuid';
 import { userUpdateSchema, userCreateSchema } from './users.schema';
-import User from './models/user';
+import UserService from './services/userService';
 import express from 'express';
 const app = express();
 const port = 3000;
@@ -16,7 +19,7 @@ sequelize.authenticate()
 app.use(express.json());
 
 app.get('/users', (req, res) => {
-    User.findAll()
+    UserService.getAllUsers()
         .then(users => res.send(JSON.stringify(users)))
         .catch(err => {
             console.error(err);
@@ -25,7 +28,8 @@ app.get('/users', (req, res) => {
 });
 
 app.get('/users/:id', (req, res) => {
-    User.findByPk(req.params.id)
+    const { id } = req.params;
+    UserService.getUserById(id)
         .then(user => res.json(user))
         .catch(err => {
             console.error(err);
@@ -35,26 +39,14 @@ app.get('/users/:id', (req, res) => {
 
 app.get('/getAutoSuggestUsers', (req, res) => {
     const { loginSubstring, limit } = req.query;
-    User.findAll({ where: { login: { [Op.like]: `%${loginSubstring}%` } } })
-        .then(users => {
-            const filtered = users.sort((a, b) => {
-                const loginA = a.login;
-                const loginB = b.login;
-                if (loginA < loginB) {
-                    return -1;
-                }
-                if (loginA > loginB) {
-                    return 1;
-                }
-                return 0;
-            }).slice(0, limit);
-            res.json(filtered);
-        })
+    UserService.getAutoSuggestUsers(loginSubstring, limit)
+        .then(users => res.json(users))
         .catch(console.error);
 });
 
 app.post('/users', validateSchema(userCreateSchema), (req, res) => {
-    User.create({ id: uuidv4(), ...req.body, isDeleted: false })
+    const userDTO = req.body;
+    UserService.createUser(userDTO)
         .then(() => res.status(204).send())
         .catch(err => {
             console.error(err);
@@ -64,7 +56,8 @@ app.post('/users', validateSchema(userCreateSchema), (req, res) => {
 
 app.put('/users/:id', validateSchema(userUpdateSchema), (req, res) => {
     const { id } = req.params;
-    User.update(req.body, { where: { id } })
+    const userDTO = req.body;
+    UserService.updateUser(id, userDTO)
         .then(() => res.status(204).send())
         .catch(err => {
             console.error(err);
@@ -74,7 +67,7 @@ app.put('/users/:id', validateSchema(userUpdateSchema), (req, res) => {
 
 app.delete('/users/:id', (req, res) => {
     const { id } = req.params;
-    User.update({ is_deleted: true }, { where: { id } })
+    UserService.deleteUser(id)
         .then(user => res.status(200).json(user))
         .catch(err => {
             console.log(err);

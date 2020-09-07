@@ -7,6 +7,7 @@
     "task1": "nodemon --exec babel-node task1",
     "task2": "nodemon --exec babel-node task2",
     "task2-1": "nodemon --exec babel-node task2-1",
+    "hw3": "nodemon --exec babel-node src/app",
     "transpile": "babel *.js --out-dir dist",
     "clean": "rimraf dist",
     "build": "npm run clean && npm run transpile",
