@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize('postgres://jypfzbwx:aYUoFzUvmkdbT98u4D0X1RPXkAlxBBQt@lallah.db.elephantsql.com:5432/jypfzbwx');
 
-const User = sequelize.define('User', {
+export default sequelize.define('User', {
     id: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -31,5 +31,3 @@ const User = sequelize.define('User', {
     updatedAt: false,
     is_deleted: 'isDeleted'
 });
-
-export default User;

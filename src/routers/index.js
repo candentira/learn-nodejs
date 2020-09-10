@@ -1,9 +1,5 @@
-import userRouter from './userRouter';
+import { initUserRouter } from './userRouter';
 
-class BaseRouter {
-    init({ app }) {
-        userRouter.init({ app });
-    }
-}
-
-export default new BaseRouter();
+export const initBaseRouter = ({ app }) => {
+    initUserRouter({ app });
+};

@@ -1,5 +1,6 @@
+import { consoleErrorhandler } from './middleware/errorHandling/errorHandling.js';
+import { initBaseRouter } from './routers';
 import express from 'express';
-import routers from './routers';
 import orm from './data-access/database';
 
 async function startServer() {
@@ -8,7 +9,8 @@ async function startServer() {
     app.use(express.json());
 
     orm.init();
-    routers.init({ app });
+    initBaseRouter({ app });
+    app.use(consoleErrorhandler);
 
     app.listen(port, () => {
         console.log(`Task 3-1 app listening at http://localhost:${port}`);
