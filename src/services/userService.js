@@ -1,6 +1,5 @@
 const { Op } = require('sequelize');
 import User from '../models/user';
-import { v4 as uuidv4 } from 'uuid';
 
 class UserService {
     getAllUsers() {
@@ -12,7 +11,7 @@ class UserService {
     }
 
     createUser(userDTO) {
-        return User.create({ id: uuidv4(), ...userDTO, isDeleted: false });
+        return User.create({ ...userDTO, isDeleted: false });
     }
 
     updateUser(id, userDTO) {
