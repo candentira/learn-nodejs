@@ -56,4 +56,17 @@ router.route('/groups/:id').delete(async (req, res, next) => {
     }
 });
 
+router.route('/groups/:groupId/users').put(async (req, res, next) => {
+    const { groupId } = req.params;
+    const userId = req.body;
+    try {
+        await groupService.addUsersToGroup(groupId, userId);
+        res.status(204).send();
+    } catch (err) {
+        err.status = err.status || 500;
+        res.status(err.status).json({ message: err.message });
+        return next(err);
+    }
+});
+
 export default router;
