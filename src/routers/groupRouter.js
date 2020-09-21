@@ -56,15 +56,21 @@ router.route('/groups/:id').delete(async (req, res, next) => {
     }
 });
 
-router.route('/groups/:groupId/users').put(async (req, res, next) => {
+router.route('/groups/:groupId/users').put((req, res, next) => {
     const { groupId } = req.params;
-    const userId = req.body;
+    const usersId = req.body;
+    if (!groupId || !usersId || !Array.isArray(usersId)) {
+        res.status(404).json({ message: 'Wrong addUsersToGroup parameters.' });
+    }
+    next();
+}, async (req, res, next) => {
+    const { groupId } = req.params;
+    const usersId = req.body;
     try {
-        await groupService.addUsersToGroup(groupId, userId);
+        await groupService.addUsersToGroup(groupId, usersId);
         res.status(204).send();
     } catch (err) {
-        err.status = err.status || 500;
-        res.status(err.status).json({ message: err.message });
+        res.status(500).json({ message: err.message });
         return next(err);
     }
 });

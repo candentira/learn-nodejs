@@ -27,25 +27,15 @@ class GroupService {
     }
 
     async addUsersToGroup(groupId, usersId) {
-        console.log(usersId);
-        if (!groupId || !usersId || !Array.isArray(usersId)) {
-            const error = new Error('Wrong addUsersToGroup parameters.');
-            error.status = 404;
-            throw error;
-        }
         await sequelize.transaction(async (t) => {
             const group = await Group.findByPk(groupId, { transaction: t });
             if (!group) {
-                const error = new Error('Group not found.');
-                error.status = 404;
-                throw error;
+                throw new Error('Group not found.');
             }
             for (const userId of usersId) {
                 const user = await User.findByPk(userId, { transaction: t });
                 if (!user) {
-                    const error = new Error('User not found.');
-                    error.status = 404;
-                    throw error;
+                    throw new Error('User not found.');
                 }
                 await user.addGroup(group, { transaction: t });
             }
