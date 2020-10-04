@@ -7,6 +7,7 @@
     "task1": "nodemon --exec babel-node task1",
     "task2": "nodemon --exec babel-node task2",
     "task2-1": "nodemon --exec babel-node task2-1",
+    "hw3": "nodemon --exec babel-node src/app",
     "transpile": "babel *.js --out-dir dist",
     "clean": "rimraf dist",
     "build": "npm run clean && npm run transpile",
@@ -36,6 +37,9 @@
     "csvtojson": "^2.0.10",
     "express": "^4.17.1",
     "joi": "^17.2.1",
+    "pg": "^8.3.3",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5",
     "uuid": "^8.3.0"
   },
   "babel": {

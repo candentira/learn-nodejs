@@ -7,4 +7,9 @@ export const userCreateSchema = Joi.object().keys({
     age: Joi.number().min(4).max(120).required()
 });
 
-export const userUpdateSchema = userCreateSchema.keys({ isDeleted: Joi.boolean().required() });
+export const userUpdateSchema = Joi.object().keys({
+    login: Joi.string(),
+    password: Joi.string().alphanum().custom(passwordValidation),
+    age: Joi.number().min(4).max(120),
+    isDeleted: Joi.boolean()
+});
