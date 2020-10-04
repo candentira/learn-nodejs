@@ -1,5 +1,6 @@
 import { consoleErrorhandler } from './middleware/errorHandling/errorHandling.js';
 import userRouter from './routers/userRouter.js';
+import groupRouter from './routers/groupRouter.js';
 import express from 'express';
 import orm from './data-access/database';
 
@@ -9,6 +10,7 @@ app.use(express.json());
 
 orm.init();
 app.use(userRouter);
+app.use(groupRouter);
 app.use(consoleErrorhandler);
 
 app.listen(port, () => {
