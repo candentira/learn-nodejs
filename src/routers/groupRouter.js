@@ -7,7 +7,7 @@ router.route('/groups').get(async (req, res, next) => {
         const groups = await groupService.getAllGroups();
         res.send(JSON.stringify(groups));
     } catch (err) {
-        res.status(500).json({ message: 'Couldn\'t retrieve Groups' });
+        err.customErrorMessage = 'Couldn\'t retrieve Groups';
         return next(err);
     }
 });
@@ -17,7 +17,7 @@ router.route('/groups/:id').get(async (req, res, next) => {
         const group = await groupService.getGroupById(id);
         res.json(group);
     } catch (err) {
-        res.status(404).json({ message: `Group with id ${req.params.id} not found` });
+        err.customErrorMessage = `Group with id ${req.params.id} not found`;
         return next(err);
     }
 });
@@ -28,7 +28,7 @@ router.route('/groups').post(async (req, res, next) => {
         await groupService.createGroup(groupDTO);
         res.status(204).send();
     } catch (err) {
-        res.status(500).json({ message: 'Group wasn\'t created' });
+        err.customErrorMessage = 'Group wasn\'t created';
         return next(err);
     }
 });
@@ -40,7 +40,7 @@ router.route('/groups/:id').put(async (req, res, next) => {
         await groupService.updateGroup(id, groupDTO);
         res.status(204).send();
     } catch (err) {
-        res.status(404).json({ message: `Group with id ${id} not found` });
+        err.customErrorMessage = `Group with id ${id} not found`;
         return next(err);
     }
 });
@@ -51,7 +51,7 @@ router.route('/groups/:id').delete(async (req, res, next) => {
         const group = await groupService.deleteGroup(id);
         res.status(200).json(group);
     } catch (err) {
-        res.status(404).json({ message: `Group with id ${req.params.id} was not deleted` });
+        err.customErrorMessage = `Group with id ${req.params.id} was not deleted`;
         return next(err);
     }
 });
@@ -70,7 +70,6 @@ router.route('/groups/:groupId/users').put((req, res, next) => {
         await groupService.addUsersToGroup(groupId, usersId);
         res.status(204).send();
     } catch (err) {
-        res.status(500).json({ message: err.message });
         return next(err);
     }
 });

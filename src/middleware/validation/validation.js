@@ -1,3 +1,5 @@
+import { StatusCodes } from 'http-status-codes';
+
 const errorResponse = schemaErrors => {
     const errors = schemaErrors.map(({ path, message }) => ({ path, message }));
     return { errors };
@@ -17,9 +19,9 @@ export const validateSchema = schema => {
             allowUnknown: false
         });
         if (error && error.isJoi) {
-            res.status(400).json(errorResponse(error.details));
-        } else {
-            next();
+            res.status(StatusCodes.BAD_REQUEST).json(errorResponse(error.details));
+            return;
         }
+        next();
     };
 };
