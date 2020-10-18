@@ -1,10 +1,13 @@
 import { errorHandler } from './middleware/errorHandling/errorHandling.js';
-import userRouter from './routers/userRouter.js';
-import groupRouter from './routers/groupRouter.js';
+import authenticateMiddleware from './middleware/authenticate/authenticate.js';
+import cors from 'cors';
+import env from 'dotenv';
 import express from 'express';
-import orm from './data-access/database';
+import groupRouter from './routers/groupRouter.js';
 import logger from './logging';
 import loggerMiddleware from './middleware/logging/loggerMiddleware.js';
+import orm from './data-access/database';
+import userRouter from './routers/userRouter.js';
 
 const app = express();
 const port = 3000;
@@ -12,6 +15,8 @@ app.use(express.json());
 
 orm.init();
 app.use(loggerMiddleware);
+app.use(authenticateMiddleware);
+app.use(cors());
 app.use(userRouter);
 app.use(groupRouter);
 app.use(errorHandler);
@@ -29,3 +34,5 @@ process.on('uncaughtException', (error) => {
 process.on('unhandledRejection', (reason) => {
     logger.warn(`unhandled Promise Rejection occured: ${reason.message}`);
 });
+
+env.config();

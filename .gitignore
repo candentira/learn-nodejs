@@ -1,4 +1,5 @@
 node_modules
 dist
+logs
 nodejs-hw1-ex2.txt
 .vscode/settings.json
