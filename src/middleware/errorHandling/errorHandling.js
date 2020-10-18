@@ -9,5 +9,4 @@ export const errorHandler = (err, req, res, next) => {
         params: req.params
     });
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.customErrorMessage });
-    next();
 };
