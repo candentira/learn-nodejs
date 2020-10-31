@@ -15,8 +15,8 @@ app.use(express.json());
 
 orm.init();
 app.use(loggerMiddleware);
-app.use(authenticateMiddleware);
 app.use(cors());
+app.use(authenticateMiddleware);
 app.use(userRouter);
 app.use(groupRouter);
 app.use(errorHandler);
