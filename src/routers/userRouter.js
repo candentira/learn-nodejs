@@ -2,6 +2,7 @@ import { validateSchema } from '../middleware/validation/validation';
 import { userUpdateSchema, userCreateSchema } from '../middleware/validation/users.schema';
 import userService from '../services/userService';
 import express from 'express';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 router.route('/users').get(async (req, res, next) => {
@@ -65,6 +66,22 @@ router.route('/users/:id').delete(async (req, res, next) => {
         res.status(200).json(user);
     } catch (err) {
         err.customErrorMessage = `User with id ${req.params.id} was not deleted`;
+        return next(err);
+    }
+});
+
+router.route('/login').post(async (req, res, next) => {
+    const { login, password } = req.body;
+    try {
+        const user = await userService.authenticate(login, password);
+        if (user) {
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+            res.json(accessToken);
+        } else {
+            res.status(403).send();
+        }
+    } catch (err) {
+        err.customErrorMessage = 'User couldn\'t be found';
         return next(err);
     }
 });

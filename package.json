@@ -7,7 +7,7 @@
     "task1": "nodemon --exec babel-node task1",
     "task2": "nodemon --exec babel-node task2",
     "task2-1": "nodemon --exec babel-node task2-1",
-    "hw3": "nodemon --exec babel-node src/app",
+    "server": "nodemon --exec babel-node src/app",
     "transpile": "babel *.js --out-dir dist",
     "clean": "rimraf dist",
     "build": "npm run clean && npm run transpile",
@@ -34,10 +34,14 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "http-status-codes": "^2.1.4",
     "joi": "^17.2.1",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.5",
