@@ -1,5 +1,8 @@
+import env from 'dotenv';
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('postgres://jypfzbwx:aYUoFzUvmkdbT98u4D0X1RPXkAlxBBQt@lallah.db.elephantsql.com:5432/jypfzbwx');
+
+env.config();
+const sequelize = new Sequelize(process.env.CONNECTION_STRING);
 
 export default sequelize.define('User', {
     id: {

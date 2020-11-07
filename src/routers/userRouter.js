@@ -5,7 +5,8 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
-router.route('/users').get(async (req, res, next) => {
+
+export const getUsers = async (req, res, next) => {
     try {
         const users = await userService.getAllUsers();
         res.send(JSON.stringify(users));
@@ -13,19 +14,24 @@ router.route('/users').get(async (req, res, next) => {
         err.customErrorMessage = 'Couldn\'t retrieve Users';
         return next(err);
     }
-});
-router.route('/users/:id').get(async (req, res, next) => {
+};
+
+export const getUsersById = async (req, res, next) => {
     const { id } = req.params;
     try {
         const user = await userService.getUserById(id);
-        res.json(user);
+        if (user) {
+            res.json(user);
+        } else {
+            throw Error();
+        }
     } catch (err) {
         err.customErrorMessage = `User with id ${req.params.id} not found`;
         return next(err);
     }
-});
+};
 
-router.route('/getAutoSuggestUsers').get(async (req, res, next) => {
+export const getAutoSuggestUsers = async (req, res, next) => {
     const { loginSubstring, limit } = req.query;
     try {
         const users = await userService.getAutoSuggestUsers(loginSubstring, limit);
@@ -34,9 +40,9 @@ router.route('/getAutoSuggestUsers').get(async (req, res, next) => {
         err.customErrorMessage = 'Couldn\'t suggest users';
         return next(err);
     }
-});
+};
 
-router.route('/users').post(validateSchema(userCreateSchema), async (req, res, next) => {
+export const postUsers = async (req, res, next) => {
     const userDTO = req.body;
     try {
         await userService.createUser(userDTO);
@@ -45,9 +51,9 @@ router.route('/users').post(validateSchema(userCreateSchema), async (req, res, n
         err.customErrorMessage = 'User wasn\'t created';
         return next(err);
     }
-});
+};
 
-router.route('/users/:id').put(validateSchema(userUpdateSchema), async (req, res, next) => {
+export const putUsersById = async (req, res, next) => {
     const { id } = req.params;
     const userDTO = req.body;
     try {
@@ -57,9 +63,9 @@ router.route('/users/:id').put(validateSchema(userUpdateSchema), async (req, res
         err.customErrorMessage =  `User with id ${id} not found`;
         return next(err);
     }
-});
+};
 
-router.route('/users/:id').delete(async (req, res, next) => {
+export const deleteUsersById = async (req, res, next) => {
     const { id } = req.params;
     try {
         const user = await userService.deleteUser(id);
@@ -68,9 +74,9 @@ router.route('/users/:id').delete(async (req, res, next) => {
         err.customErrorMessage = `User with id ${req.params.id} was not deleted`;
         return next(err);
     }
-});
+};
 
-router.route('/login').post(async (req, res, next) => {
+export const postLogin = async (req, res, next) => {
     const { login, password } = req.body;
     try {
         const user = await userService.authenticate(login, password);
@@ -84,6 +90,20 @@ router.route('/login').post(async (req, res, next) => {
         err.customErrorMessage = 'User couldn\'t be found';
         return next(err);
     }
-});
+};
+
+router.route('/users').get(getUsers);
+
+router.route('/users/:id').get(getUsersById);
+
+router.route('/getAutoSuggestUsers').get(getAutoSuggestUsers);
+
+router.route('/users').post(validateSchema(userCreateSchema), postUsers);
+
+router.route('/users/:id').put(validateSchema(userUpdateSchema), putUsersById);
+
+router.route('/users/:id').delete(deleteUsersById);
+
+router.route('/login').post(postLogin);
 
 export default router;

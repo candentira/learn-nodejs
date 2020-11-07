@@ -9,6 +9,8 @@ import loggerMiddleware from './middleware/logging/loggerMiddleware.js';
 import orm from './data-access/database';
 import userRouter from './routers/userRouter.js';
 
+env.config();
+
 const app = express();
 const port = 3000;
 app.use(express.json());
@@ -35,4 +37,4 @@ process.on('unhandledRejection', (reason) => {
     logger.warn(`unhandled Promise Rejection occured: ${reason.message}`);
 });
 
-env.config();
+export default app;

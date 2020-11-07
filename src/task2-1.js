@@ -10,7 +10,7 @@ import express from 'express';
 const app = express();
 const port = 3000;
 
-const sequelize = new Sequelize('postgres://jypfzbwx:aYUoFzUvmkdbT98u4D0X1RPXkAlxBBQt@lallah.db.elephantsql.com:5432/jypfzbwx');
+const sequelize = new Sequelize(process.env.CONNECTION_STRING);
 
 sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
