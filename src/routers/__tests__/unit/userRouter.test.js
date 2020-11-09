@@ -23,7 +23,7 @@ describe('userRouter', () => {
                 age: 15,
                 is_deleted: false
             }];
-            userService.getAllUsers.mockImplementation(() => Promise.resolve(mockedUsers));
+            userService.getAllUsers.mockResolvedValue(mockedUsers);
             const res = { send: jest.fn() };
             const next = jest.fn();
             await getUsers({}, res, next);
@@ -35,7 +35,7 @@ describe('userRouter', () => {
 
         it('should handle errors', async done => {
             const err = {};
-            userService.getAllUsers.mockImplementation(() => Promise.reject(err));
+            userService.getAllUsers.mockRejectedValue(err);
             const next = jest.fn();
             await getUsers({}, {}, next);
             expect(err.customErrorMessage).not.toBeFalsy();
@@ -83,7 +83,7 @@ describe('userRouter', () => {
 
         it('should handle case when userService throws error', async done => {
             const err = {};
-            userService.getUserById.mockImplementation(() => Promise.reject(err));
+            userService.getUserById.mockRejectedValue(err);
             const req = { params: {} };
             const res = { json: jest.fn() };
             const next = jest.fn();
@@ -101,7 +101,7 @@ describe('userRouter', () => {
     describe('getAutoSuggestUsers', () => {
         it('should put stringified users in response', async done => {
             const mockedUser = { id: 1, login: 2 };
-            userService.getAutoSuggestUsers.mockImplementation(() => Promise.resolve(mockedUser));
+            userService.getAutoSuggestUsers.mockResolvedValue(mockedUser);
             const req = { query: {} };
             const res = { json: jest.fn() };
             const next = jest.fn();
@@ -114,7 +114,7 @@ describe('userRouter', () => {
 
         it('should handle errors', async done => {
             const err = {};
-            userService.getAutoSuggestUsers.mockImplementation(() => Promise.reject(err));
+            userService.getAutoSuggestUsers.mockRejectedValue(err);
             const req = { query: {} };
             const res = { json: jest.fn() };
             const next = jest.fn();
@@ -127,7 +127,7 @@ describe('userRouter', () => {
 
     describe('postUsers', () => {
         it('should responde with 204 when user was created', async done => {
-            userService.createUser.mockImplementation(() => Promise.resolve());
+            userService.createUser.mockResolvedValue();
             const req = { body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -139,7 +139,7 @@ describe('userRouter', () => {
 
         it('should handle errors', async done => {
             const err = {};
-            userService.createUser.mockImplementation(() => Promise.reject(err));
+            userService.createUser.mockRejectedValue(err);
             const req = { body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -154,7 +154,7 @@ describe('userRouter', () => {
 
     describe('putUsersById', () => {
         it('should responde with 204 when user was updated', async done => {
-            userService.updateUser.mockImplementation(() => Promise.resolve());
+            userService.updateUser.mockResolvedValue();
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -166,7 +166,7 @@ describe('userRouter', () => {
 
         it('should handle errors', async done => {
             const err = {};
-            userService.updateUser.mockImplementation(() => Promise.reject(err));
+            userService.updateUser.mockRejectedValue(err);
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -181,7 +181,7 @@ describe('userRouter', () => {
 
     describe('deleteUsersById', () => {
         it('should responde with 200 when user was deleted', async done => {
-            userService.deleteUser.mockImplementation(() => Promise.resolve());
+            userService.deleteUser.mockResolvedValue();
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -193,7 +193,7 @@ describe('userRouter', () => {
 
         it('should handle errors', async done => {
             const err = {};
-            userService.deleteUser.mockImplementation(() => Promise.reject(err));
+            userService.deleteUser.mockRejectedValue(err);
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -208,7 +208,7 @@ describe('userRouter', () => {
 
     describe('postLogin', () => {
         it("should responde with accesstoken if wasn't logged in before", async done => {
-            userService.authenticate.mockReturnValue(Promise.resolve({}));
+            userService.authenticate.mockResolvedValue({});
             const accessToken = 42;
             jwt.sign.mockReturnValue(accessToken);
             const req = { body: {} };
@@ -221,7 +221,7 @@ describe('userRouter', () => {
         });
 
         it("should responde with 403 if user wasn't found", async done => {
-            userService.authenticate.mockReturnValue(Promise.resolve());
+            userService.authenticate.mockResolvedValue();
             const accessToken = 42;
             jwt.sign.mockReturnValue(accessToken);
             const req = { body: {} };
@@ -236,7 +236,7 @@ describe('userRouter', () => {
         });
 
         it('should handle errors', async done => {
-            userService.authenticate.mockReturnValue(Promise.reject({}));
+            userService.authenticate.mockRejectedValue({});
             const req = { body: {} };
             const res = { json: jest.fn(), status: jest.fn() };
             const next = jest.fn();

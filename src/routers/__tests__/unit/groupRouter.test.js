@@ -4,7 +4,6 @@ import {
     getGroupsById,
     postGroups,
     putGroupsById,
-    postUsers,
     deleteGroupsById,
     putUsersIntoGroup
 } from '../../groupRouter';
@@ -15,7 +14,7 @@ describe('groupRouter', () => {
     describe('getGroups', () => {
         it('should put stringified users in response', async done => {
             const mockedUsers = [{ id: '1', login: '2' }];
-            groupService.getAllGroups.mockReturnValue(Promise.resolve(mockedUsers));
+            groupService.getAllGroups.mockResolvedValue(mockedUsers);
             const res = { send: jest.fn() };
             const next = jest.fn();
             await getGroups({}, res, next);
@@ -26,7 +25,7 @@ describe('groupRouter', () => {
         });
 
         it('should handle errors', async done => {
-            groupService.getAllGroups.mockReturnValue(Promise.reject({}));
+            groupService.getAllGroups.mockRejectedValue({});
             const next = jest.fn();
             await getGroups({}, {}, next);
             expect(next.mock.calls[0][0]).toEqual(expect.objectContaining({
@@ -74,7 +73,7 @@ describe('groupRouter', () => {
         });
 
         it('should handle case when groupService throws error', async done => {
-            groupService.getGroupById.mockImplementation(() => Promise.reject({}));
+            groupService.getGroupById.mockRejectedValue({});
             const req = { params: {} };
             const res = { json: jest.fn() };
             const next = jest.fn();
@@ -90,7 +89,7 @@ describe('groupRouter', () => {
 
     describe('postGroups', () => {
         it('should responde with 204 when group was created', async done => {
-            groupService.createGroup.mockReturnValue(Promise.resolve());
+            groupService.createGroup.mockResolvedValue();
             const req = { body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -101,7 +100,7 @@ describe('groupRouter', () => {
         });
 
         it('should handle errors', async done => {
-            groupService.createGroup.mockReturnValue(Promise.reject({}));
+            groupService.createGroup.mockRejectedValue({});
             const req = { body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -116,7 +115,7 @@ describe('groupRouter', () => {
 
     describe('putGroupsById', () => {
         it('should responde with 204 when groupd was updated', async done => {
-            groupService.updateGroup.mockReturnValue(Promise.resolve());
+            groupService.updateGroup.mockResolvedValue();
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -128,7 +127,7 @@ describe('groupRouter', () => {
 
         it('should handle errors', async done => {
             const err = {};
-            groupService.updateGroup.mockReturnValue(Promise.reject(err));
+            groupService.updateGroup.mockRejectedValue(err);
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -143,7 +142,7 @@ describe('groupRouter', () => {
 
     describe('deleteGroupsById', () => {
         it('should responde with 200 when group was deleted', async done => {
-            groupService.deleteGroup.mockReturnValue(Promise.resolve());
+            groupService.deleteGroup.mockResolvedValue();
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -154,7 +153,7 @@ describe('groupRouter', () => {
         });
 
         it('should handle errors', async done => {
-            groupService.deleteGroup.mockReturnValue(Promise.reject({}));
+            groupService.deleteGroup.mockRejectedValue({});
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -169,7 +168,7 @@ describe('groupRouter', () => {
 
     describe('putUsersIntoGroup', () => {
         it('should responde with 204 when user was added into the group', async done => {
-            groupService.addUsersToGroup.mockReturnValue(Promise.resolve());
+            groupService.addUsersToGroup.mockResolvedValue();
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
@@ -181,7 +180,7 @@ describe('groupRouter', () => {
 
         it('should handle errors', async done => {
             const err = {};
-            groupService.addUsersToGroup.mockReturnValue(Promise.reject(err));
+            groupService.addUsersToGroup.mockRejectedValue(err);
             const req = { params: { id: 1 }, body: {} };
             const res = { status: jest.fn() };
             const next = jest.fn();
