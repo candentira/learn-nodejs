@@ -1,9 +1,12 @@
 import Group from '../models/group';
 import User from '../models/user';
 import logger from '../logging';
+import env from 'dotenv';
+
+env.config();
 
 const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('postgres://jypfzbwx:aYUoFzUvmkdbT98u4D0X1RPXkAlxBBQt@lallah.db.elephantsql.com:5432/jypfzbwx');
+const sequelize = new Sequelize(process.env.CONNECTION_STRING);
 
 class GroupService {
     getAllGroups() {

@@ -2,7 +2,8 @@ import groupService from '../services/groupService';
 import express from 'express';
 
 const router = express.Router();
-router.route('/groups').get(async (req, res, next) => {
+
+export const getGroups = async (req, res, next) => {
     try {
         const groups = await groupService.getAllGroups();
         res.send(JSON.stringify(groups));
@@ -10,19 +11,24 @@ router.route('/groups').get(async (req, res, next) => {
         err.customErrorMessage = 'Couldn\'t retrieve Groups';
         return next(err);
     }
-});
-router.route('/groups/:id').get(async (req, res, next) => {
+};
+
+export const getGroupsById = async (req, res, next) => {
     const { id } = req.params;
     try {
         const group = await groupService.getGroupById(id);
-        res.json(group);
+        if (group) {
+            res.json(group);
+        } else {
+            throw Error();
+        }
     } catch (err) {
         err.customErrorMessage = `Group with id ${req.params.id} not found`;
         return next(err);
     }
-});
+};
 
-router.route('/groups').post(async (req, res, next) => {
+export const postGroups = async (req, res, next) => {
     const groupDTO = req.body;
     try {
         await groupService.createGroup(groupDTO);
@@ -31,9 +37,8 @@ router.route('/groups').post(async (req, res, next) => {
         err.customErrorMessage = 'Group wasn\'t created';
         return next(err);
     }
-});
-
-router.route('/groups/:id').put(async (req, res, next) => {
+};
+export const putGroupsById = async (req, res, next) => {
     const { id } = req.params;
     const groupDTO = req.body;
     try {
@@ -43,9 +48,9 @@ router.route('/groups/:id').put(async (req, res, next) => {
         err.customErrorMessage = `Group with id ${id} not found`;
         return next(err);
     }
-});
+};
 
-router.route('/groups/:id').delete(async (req, res, next) => {
+export const deleteGroupsById = async (req, res, next) => {
     const { id } = req.params;
     try {
         const group = await groupService.deleteGroup(id);
@@ -54,16 +59,9 @@ router.route('/groups/:id').delete(async (req, res, next) => {
         err.customErrorMessage = `Group with id ${req.params.id} was not deleted`;
         return next(err);
     }
-});
+};
 
-router.route('/groups/:groupId/users').put((req, res, next) => {
-    const { groupId } = req.params;
-    const usersId = req.body;
-    if (!groupId || !usersId || !Array.isArray(usersId)) {
-        res.status(404).json({ message: 'Wrong addUsersToGroup parameters.' });
-    }
-    next();
-}, async (req, res, next) => {
+export const putUsersIntoGroup = async (req, res, next) => {
     const { groupId } = req.params;
     const usersId = req.body;
     try {
@@ -72,6 +70,25 @@ router.route('/groups/:groupId/users').put((req, res, next) => {
     } catch (err) {
         return next(err);
     }
-});
+};
+
+router.route('/groups').get(getGroups);
+
+router.route('/groups/:id').get(getGroupsById);
+
+router.route('/groups').post(postGroups);
+
+router.route('/groups/:id').put(putGroupsById);
+
+router.route('/groups/:id').delete(deleteGroupsById);
+
+router.route('/groups/:groupId/users').put((req, res, next) => {
+    const { groupId } = req.params;
+    const usersId = req.body;
+    if (!groupId || !usersId || !Array.isArray(usersId)) {
+        res.status(404).json({ message: 'Wrong addUsersToGroup parameters.' });
+    }
+    next();
+}, putUsersIntoGroup);
 
 export default router;
